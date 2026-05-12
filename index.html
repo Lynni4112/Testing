@@ -1,0 +1,756 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>POWERING LEGENDS | Ultra-Fast MC Hosting</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Rajdhani:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-deep: #0a0a0a;
+            --primary-emerald: #00ff88;
+            --secondary-blue: #00cfff;
+            --glass: rgba(255, 255, 255, 0.05);
+            --glass-border: rgba(255, 255, 255, 0.1);
+            --text-main: #e0e0e0;
+            --font-display: 'Press Start 2P', cursive;
+            --font-body: 'Rajdhani', sans-serif;
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            outline: none;
+        }
+
+        body {
+            background-color: var(--bg-deep);
+            color: var(--text-main);
+            font-family: var(--font-body);
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+
+        /* --- BACKGROUND CANVAS --- */
+        #bg-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: -1;
+            opacity: 0.4;
+        }
+
+        /* --- UTILITIES --- */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        .section-padding { padding: 100px 0; }
+
+        .glow-text {
+            text-shadow: 0 0 15px var(--primary-emerald);
+        }
+
+        .btn {
+            padding: 1rem 2rem;
+            font-family: var(--font-display);
+            font-size: 0.7rem;
+            cursor: pointer;
+            border-radius: 4px;
+            transition: var(--transition);
+            text-transform: uppercase;
+            text-decoration: none;
+            display: inline-block;
+            text-align: center;
+        }
+
+        .btn-primary {
+            background: var(--primary-emerald);
+            color: black;
+            border: none;
+            box-shadow: 0 0 20px rgba(0, 255, 136, 0.3);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 0 35px var(--primary-emerald);
+            animation: pulse 1.5s infinite;
+        }
+
+        .btn-outline {
+            background: transparent;
+            color: var(--secondary-blue);
+            border: 2px solid var(--secondary-blue);
+        }
+
+        .btn-outline:hover {
+            background: var(--secondary-blue);
+            color: black;
+            box-shadow: 0 0 25px var(--secondary-blue);
+        }
+
+        @keyframes pulse {
+            0% { box-shadow: 0 0 15px var(--primary-emerald); }
+            50% { box-shadow: 0 0 35px var(--primary-emerald); }
+            100% { box-shadow: 0 0 15px var(--primary-emerald); }
+        }
+
+        /* --- NAVIGATION --- */
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 1000;
+            padding: 1.5rem 0;
+            transition: var(--transition);
+        }
+
+        nav.scrolled {
+            background: rgba(10, 10, 10, 0.8);
+            backdrop-filter: blur(15px);
+            padding: 0.8rem 0;
+            border-bottom: 1px solid var(--glass-border);
+        }
+
+        .nav-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-family: var(--font-display);
+            font-size: 0.9rem;
+            color: var(--primary-emerald);
+            text-decoration: none;
+        }
+
+        .nav-links { display: flex; gap: 2rem; align-items: center; }
+        .nav-links a {
+            color: var(--text-main);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 1.1rem;
+            transition: var(--transition);
+        }
+        .nav-links a:hover { color: var(--primary-emerald); }
+
+        /* --- HERO --- */
+        .hero {
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+        }
+
+        .hero h1 {
+            font-family: var(--font-display);
+            font-size: clamp(2rem, 8vw, 4.5rem);
+            margin-bottom: 1.5rem;
+            color: white;
+        }
+
+        .hero p {
+            font-size: 1.5rem;
+            max-width: 700px;
+            margin-bottom: 3rem;
+            color: #aaa;
+        }
+
+        .hero-btns { display: flex; gap: 1.5rem; }
+
+        /* --- CONFIGURATOR --- */
+        .config-grid {
+            display: grid;
+            grid-template-columns: 1.5fr 1fr;
+            gap: 3rem;
+            margin-top: 3rem;
+        }
+
+        .config-card {
+            background: var(--glass);
+            border: 1px solid var(--glass-border);
+            padding: 2.5rem;
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+        }
+
+        .config-group { margin-bottom: 2rem; }
+        .config-group label {
+            display: block;
+            margin-bottom: 1rem;
+            font-weight: bold;
+            color: var(--secondary-blue);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        input[type="range"] {
+            width: 100%;
+            accent-color: var(--primary-emerald);
+            background: #333;
+            height: 8px;
+            border-radius: 5px;
+        }
+
+        .tab-group { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+        .tab-btn {
+            background: #1a1a1a;
+            border: 1px solid var(--glass-border);
+            color: white;
+            padding: 0.5rem 1rem;
+            cursor: pointer;
+            border-radius: 4px;
+            font-family: var(--font-body);
+            transition: var(--transition);
+        }
+        .tab-btn.active {
+            background: var(--secondary-blue);
+            color: black;
+            border-color: var(--secondary-blue);
+        }
+
+        .summary-card {
+            background: linear-gradient(135deg, rgba(0, 255, 136, 0.1), rgba(0, 207, 255, 0.1));
+            border: 1px solid var(--primary-emerald);
+            padding: 2rem;
+            border-radius: 15px;
+            height: fit-content;
+        }
+
+        .price-display {
+            font-family: var(--font-display);
+            font-size: 2rem;
+            margin: 1.5rem 0;
+            color: var(--primary-emerald);
+        }
+
+        /* --- FEATURES --- */
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+        }
+
+        .feat-card {
+            background: var(--glass);
+            border: 1px solid var(--glass-border);
+            padding: 2rem;
+            border-radius: 12px;
+            transition: var(--transition);
+        }
+
+        .feat-card:hover {
+            transform: translateY(-10px);
+            border-color: var(--primary-emerald);
+            background: rgba(0, 255, 136, 0.05);
+        }
+
+        .feat-card h3 {
+            margin: 1rem 0;
+            font-family: var(--font-display);
+            font-size: 0.8rem;
+            color: white;
+        }
+
+        /* --- PRICING --- */
+        .plans-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .plan-card {
+            background: var(--glass);
+            border: 1px solid var(--glass-border);
+            padding: 3rem 2rem;
+            border-radius: 20px;
+            text-align: center;
+            position: relative;
+            transition: var(--transition);
+        }
+
+        .plan-card.popular {
+            border: 2px solid var(--primary-emerald);
+            transform: scale(1.05);
+            background: rgba(0, 255, 136, 0.03);
+        }
+
+        .popular-badge {
+            position: absolute;
+            top: -15px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--primary-emerald);
+            color: black;
+            padding: 5px 15px;
+            font-family: var(--font-display);
+            font-size: 0.6rem;
+            border-radius: 20px;
+        }
+
+        /* --- MODPACKS --- */
+        .scroll-container {
+            display: flex;
+            overflow-x: auto;
+            gap: 2rem;
+            padding: 2rem 0;
+            scrollbar-width: none;
+        }
+        .scroll-container::-webkit-scrollbar { display: none; }
+
+        .modpack-card {
+            min-width: 280px;
+            height: 180px;
+            border-radius: 15px;
+            padding: 1.5rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            background: linear-gradient(45deg, #1a1a1a, #333);
+            border: 1px solid var(--glass-border);
+            transition: var(--transition);
+            cursor: pointer;
+        }
+
+        .modpack-card:hover {
+            transform: scale(1.05);
+            border-color: var(--secondary-blue);
+        }
+
+        /* --- FAQ --- */
+        .faq-item {
+            background: var(--glass);
+            border: 1px solid var(--glass-border);
+            margin-bottom: 1rem;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .faq-trigger {
+            width: 100%;
+            padding: 1.5rem;
+            background: none;
+            border: none;
+            color: white;
+            text-align: left;
+            font-family: var(--font-body);
+            font-size: 1.2rem;
+            font-weight: 700;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .faq-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease;
+            padding: 0 1.5rem;
+            color: #aaa;
+        }
+
+        .faq-item.active .faq-content {
+            max-height: 200px;
+            padding-bottom: 1.5rem;
+        }
+
+        /* --- FOOTER --- */
+        footer {
+            background: #050505;
+            padding: 50px 0;
+            border-top: 1px solid var(--glass-border);
+        }
+
+        .footer-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr;
+            gap: 4rem;
+        }
+
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s ease-out;
+        }
+
+        .reveal.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        @media (max-width: 768px) {
+            .nav-links { display: none; }
+            .config-grid { grid-template-columns: 1fr; }
+            .footer-grid { grid-template-columns: 1fr; gap: 2rem; }
+            .hero h1 { font-size: 2.5rem; }
+            .plan-card.popular { transform: scale(1); }
+        }
+    </style>
+</head>
+<body>
+
+    <canvas id="bg-canvas"></canvas>
+
+    <nav id="navbar">
+        <div class="container nav-content">
+            <a href="#" class="logo">POWERING LEGENDS.</a>
+            <div class="nav-links">
+                <a href="#config">Configurator</a>
+                <a href="#features">Features</a>
+                <a href="#plans">Plans</a>
+                <a href="#faq">FAQ</a>
+                <a href="#" class="btn btn-primary">Client Area</a>
+            </div>
+        </div>
+    </nav>
+
+    <section class="hero container">
+        <h1 class="glow-text">POWERING LEGENDS.</h1>
+        <p>High-performance Minecraft hosting on Ryzen 9 7950X hardware. Instant setup. Global locations. No lag.</p>
+        <div class="hero-btns">
+            <a href="#config" class="btn btn-primary">Launch Server</a>
+            <a href="#locations" class="btn btn-outline">View Locations</a>
+        </div>
+    </section>
+
+    <section id="config" class="section-padding container reveal">
+        <h2 style="font-family: var(--font-display); font-size: 1.5rem; color: var(--secondary-blue);">Flexible Scaling</h2>
+        <p style="font-size: 1.2rem; margin-bottom: 2rem;">Custom Server Configurator</p>
+        
+        <div class="config-grid">
+            <div class="config-card">
+                <div class="config-group">
+                    <label>RAM: <span id="ram-val">30</span> GB</label>
+                    <input type="range" id="ram-slider" min="2" max="64" value="30">
+                </div>
+
+                <div class="config-group">
+                    <label>Player Slots</label>
+                    <div class="tab-group" id="player-tabs">
+                        <button class="tab-btn" data-val="10">10</button>
+                        <button class="tab-btn" data-val="20">20</button>
+                        <button class="tab-btn active" data-val="50">50</button>
+                        <button class="tab-btn" data-val="100">100</button>
+                        <button class="tab-btn" data-val="999">Unlimited</button>
+                    </div>
+                </div>
+
+                <div class="config-group">
+                    <label>Server Type</label>
+                    <div class="tab-group" id="type-tabs">
+                        <button class="tab-btn active" data-val="0">Vanilla</button>
+                        <button class="tab-btn" data-val="0">Spigot</button>
+                        <button class="tab-btn" data-val="0">Paper</button>
+                        <button class="tab-btn" data-val="0">Forge</button>
+                        <button class="tab-btn" data-val="5">Modpack</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="summary-card">
+                <h3 style="font-family: var(--font-display); font-size: 0.8rem;">Selection Summary</h3>
+                <div style="margin-top: 1.5rem; display: flex; flex-direction: column; gap: 0.5rem;">
+                    <p>RAM: <b id="sum-ram">30GB</b></p>
+                    <p>Players: <b id="sum-players">50</b></p>
+                    <p>Type: <b id="sum-type">Vanilla</b></p>
+                </div>
+                <div class="price-display">$<span id="total-price">0</span>/mo</div>
+                <button class="btn btn-primary" style="width: 100%;">Deploy Now</button>
+            </div>
+        </div>
+    </section>
+
+    <section id="features" class="section-padding container reveal">
+        <div class="features-grid">
+            <div class="feat-card">
+                <div style="font-size: 2rem;">⚡</div>
+                <h3>Ryzen 9 7950X</h3>
+                <p>Peak single-core performance perfect for massive modpacks and complex Redstone.</p>
+            </div>
+            <div class="feat-card">
+                <div style="font-size: 2rem;">🛡️</div>
+                <h3>12Tbps DDoS Protection</h3>
+                <p>Advanced filtering keeps your community online during the heaviest attacks.</p>
+            </div>
+            <div class="feat-card">
+                <div style="font-size: 2rem;">🚀</div>
+                <h3>NVMe Gen4 Storage</h3>
+                <p>Lightning-fast world loading and saving with zero disk-io bottlenecks.</p>
+            </div>
+            <div class="feat-card">
+                <div style="font-size: 2rem;">💎</div>
+                <h3>99.9% Uptime SLA</h3>
+                <p>Reliable hardware and redundant networking you can count on 24/7.</p>
+            </div>
+        </div>
+    </section>
+
+    <section id="plans" class="section-padding container reveal">
+        <div style="text-align: center; margin-bottom: 4rem;">
+            <h2 style="font-family: var(--font-display); font-size: 1.5rem; color: var(--primary-emerald);">The Arsenal</h2>
+            <p>Ready-to-go hosting configurations</p>
+        </div>
+        <div class="plans-grid">
+            <div class="plan-card">
+                <h3 style="font-family: var(--font-display); color: #00ff88;">Creeper</h3>
+                <div style="font-size: 2.5rem; margin: 1.5rem 0;">$10<span style="font-size: 1rem;">/mo</span></div>
+                <ul style="list-style: none; margin-bottom: 2rem; color: #aaa;">
+                    <li>4 GB DDR5 RAM</li>
+                    <li>20 Player Slots</li>
+                    <li>Global Locations</li>
+                </ul>
+                <button class="btn btn-outline" style="width: 100%;">Get Started</button>
+            </div>
+            <div class="plan-card popular">
+                <span class="popular-badge">Most Popular</span>
+                <h3 style="font-family: var(--font-display); color: #00cfff;">Enderman</h3>
+                <div style="font-size: 2.5rem; margin: 1.5rem 0;">$35<span style="font-size: 1rem;">/mo</span></div>
+                <ul style="list-style: none; margin-bottom: 2rem; color: #aaa;">
+                    <li>16 GB DDR5 RAM</li>
+                    <li>50 Player Slots</li>
+                    <li>Free Dedicated IP</li>
+                </ul>
+                <button class="btn btn-primary" style="width: 100%;">Get Started</button>
+            </div>
+            <div class="plan-card">
+                <h3 style="font-family: var(--font-display); color: #ff0055;">Warden</h3>
+                <div style="font-size: 2.5rem; margin: 1.5rem 0;">$65<span style="font-size: 1rem;">/mo</span></div>
+                <ul style="list-style: none; margin-bottom: 2rem; color: #aaa;">
+                    <li>32 GB DDR5 RAM</li>
+                    <li>Unlimited Slots</li>
+                    <li>Extreme DDoS Protection</li>
+                </ul>
+                <button class="btn btn-outline" style="width: 100%;">Get Started</button>
+            </div>
+        </div>
+    </section>
+
+    <section id="locations" class="section-padding container reveal">
+        <h2 style="font-family: var(--font-display); font-size: 1.2rem; text-align: center; margin-bottom: 3rem;">Global Node Network</h2>
+        <div style="background: var(--glass); border-radius: 20px; padding: 4rem; text-align: center; border: 1px solid var(--glass-border);">
+            <div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 1.5rem;">
+                <span class="btn btn-outline" style="font-size: 0.6rem;">~12ms North America</span>
+                <span class="btn btn-outline" style="font-size: 0.6rem;">~18ms Europe</span>
+                <span class="btn btn-outline" style="font-size: 0.6rem;">~45ms Asia</span>
+                <span class="btn btn-outline" style="font-size: 0.6rem;">~32ms Australia</span>
+            </div>
+            <p style="margin-top: 2rem; color: #666;">Low-latency gaming provided via Anycast routing.</p>
+        </div>
+    </section>
+
+    <section class="section-padding container reveal">
+        <h2 style="font-family: var(--font-display); font-size: 1.2rem; margin-bottom: 2rem;">Modpack One-Click</h2>
+        <div class="scroll-container">
+            <div class="modpack-card" style="background: linear-gradient(to top, #1a1a1a, #2d5a27);">
+                <b>RLCraft</b>
+                <span style="font-size: 0.8rem; opacity: 0.7;">Hardcore Survival</span>
+            </div>
+            <div class="modpack-card" style="background: linear-gradient(to top, #1a1a1a, #5a275a);">
+                <b>All the Mods 9</b>
+                <span style="font-size: 0.8rem; opacity: 0.7;">Everything Included</span>
+            </div>
+            <div class="modpack-card" style="background: linear-gradient(to top, #1a1a1a, #272d5a);">
+                <b>SkyFactory 4</b>
+                <span style="font-size: 0.8rem; opacity: 0.7;">Technical Skyblock</span>
+            </div>
+            <div class="modpack-card" style="background: linear-gradient(to top, #1a1a1a, #5a2727);">
+                <b>Pixelmon</b>
+                <span style="font-size: 0.8rem; opacity: 0.7;">Monsters & Magic</span>
+            </div>
+            <div class="modpack-card" style="background: linear-gradient(to top, #1a1a1a, #5a4f27);">
+                <b>Better MC</b>
+                <span style="font-size: 0.8rem; opacity: 0.7;">Vanilla+ Overhaul</span>
+            </div>
+        </div>
+    </section>
+
+    <section id="faq" class="section-padding container reveal">
+        <h2 style="font-family: var(--font-display); font-size: 1.2rem; margin-bottom: 3rem; text-align: center;">Frequently Asked Questions</h2>
+        <div style="max-width: 800px; margin: 0 auto;">
+            <div class="faq-item">
+                <button class="faq-trigger">Can I switch modpacks anytime? <span>+</span></button>
+                <div class="faq-content">Yes! Our custom panel allows you to swap between hundreds of modpacks with a single click. We handle the installation automatically.</div>
+            </div>
+            <div class="faq-item">
+                <button class="faq-trigger">How fast is setup? <span>+</span></button>
+                <div class="faq-content">Servers are provisioned instantly. As soon as your payment is confirmed, your Ryzen node starts spinning up your instance.</div>
+            </div>
+            <div class="faq-item">
+                <button class="faq-trigger">Do you support custom JARs? <span>+</span></button>
+                <div class="faq-content">Absolutely. You have full FTP access to upload any server JAR you wish, including custom BungeeCord or Velocity forks.</div>
+            </div>
+            <div class="faq-item">
+                <button class="faq-trigger">What's your refund policy? <span>+</span></button>
+                <div class="faq-content">We offer a 48-hour "No Questions Asked" refund if you are unhappy with the performance or latency.</div>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="container footer-grid">
+            <div>
+                <h2 style="font-family: var(--font-display); font-size: 0.8rem; color: var(--primary-emerald);">POWERING LEGENDS.</h2>
+                <p style="margin-top: 1rem; color: #666;">Top-tier hosting for serious communities. Hardware that actually matches the hype.</p>
+            </div>
+            <div>
+                <h4 style="color: white; margin-bottom: 1rem;">Network</h4>
+                <p>Discord</p>
+                <p>Server Status</p>
+                <p>Documentation</p>
+            </div>
+            <div>
+                <h4 style="color: white; margin-bottom: 1rem;">Legal</h4>
+                <p>Terms of Service</p>
+                <p>Privacy Policy</p>
+                <p>SLA</p>
+            </div>
+        </div>
+        <div class="container" style="margin-top: 3rem; border-top: 1px solid #1a1a1a; padding-top: 2rem; color: #444; font-size: 0.9rem;">
+            © 2026 PoweringLegends. All rights reserved.
+        </div>
+    </footer>
+
+    <script>
+        // --- CANVAS BACKGROUND ---
+        const canvas = document.getElementById('bg-canvas');
+        const ctx = canvas.getContext('2d');
+        let width, height;
+
+        function resize() {
+            width = canvas.width = window.innerWidth;
+            height = canvas.height = window.innerHeight;
+        }
+        window.addEventListener('resize', resize);
+        resize();
+
+        const dots = Array.from({ length: 50 }, () => ({
+            x: Math.random() * width,
+            y: Math.random() * height,
+            vx: (Math.random() - 0.5) * 0.5,
+            vy: (Math.random() - 0.5) * 0.5
+        }));
+
+        function draw() {
+            ctx.clearRect(0, 0, width, height);
+            ctx.fillStyle = '#00ff88';
+            ctx.strokeStyle = '#00ff8822';
+            
+            dots.forEach(dot => {
+                dot.x += dot.vx;
+                dot.y += dot.vy;
+                if (dot.x < 0 || dot.x > width) dot.vx *= -1;
+                if (dot.y < 0 || dot.y > height) dot.vy *= -1;
+
+                ctx.beginPath();
+                ctx.arc(dot.x, dot.y, 1.5, 0, Math.PI * 2);
+                ctx.fill();
+
+                dots.forEach(other => {
+                    const dist = Math.hypot(dot.x - other.x, dot.y - other.y);
+                    if (dist < 150) {
+                        ctx.beginPath();
+                        ctx.moveTo(dot.x, dot.y);
+                        ctx.lineTo(other.x, other.y);
+                        ctx.stroke();
+                    }
+                });
+            });
+            requestAnimationFrame(draw);
+        }
+        draw();
+
+        // --- CONFIGURATOR LOGIC ---
+        const ramSlider = document.getElementById('ram-slider');
+        const ramVal = document.getElementById('ram-val');
+        const sumRam = document.getElementById('sum-ram');
+        const sumPlayers = document.getElementById('sum-players');
+        const sumType = document.getElementById('sum-type');
+        const totalPrice = document.getElementById('total-price');
+
+        let state = {
+            ram: 30,
+            players: 50,
+            typePrice: 0,
+            typeName: 'Vanilla'
+        };
+
+        function updatePrice() {
+            const base = 5;
+            const ramCost = state.ram * 2;
+            const playerCost = Math.ceil(state.players / 10) * 1;
+            const total = base + ramCost + playerCost + state.typePrice;
+            
+            // Simple count animation
+            const current = parseInt(totalPrice.innerText);
+            if(current !== total) {
+                totalPrice.innerText = total;
+            }
+
+            ramVal.innerText = state.ram;
+            sumRam.innerText = state.ram + 'GB';
+            sumPlayers.innerText = state.players === 999 ? 'Unlimited' : state.players;
+            sumType.innerText = state.typeName;
+        }
+
+        ramSlider.oninput = (e) => {
+            state.ram = parseInt(e.target.value);
+            updatePrice();
+        };
+
+        document.querySelectorAll('#player-tabs .tab-btn').forEach(btn => {
+            btn.onclick = () => {
+                document.querySelector('#player-tabs .active').classList.remove('active');
+                btn.classList.add('active');
+                state.players = parseInt(btn.dataset.val);
+                updatePrice();
+            };
+        });
+
+        document.querySelectorAll('#type-tabs .tab-btn').forEach(btn => {
+            btn.onclick = () => {
+                document.querySelector('#type-tabs .active').classList.remove('active');
+                btn.classList.add('active');
+                state.typePrice = parseInt(btn.dataset.val);
+                state.typeName = btn.innerText;
+                updatePrice();
+            };
+        });
+
+        updatePrice();
+
+        // --- SCROLL REVEAL ---
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) entry.target.classList.add('visible');
+            });
+        }, { threshold: 0.1 });
+
+        document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+        // --- NAVBAR EFFECTS ---
+        window.onscroll = () => {
+            const nav = document.getElementById('navbar');
+            if (window.scrollY > 50) nav.classList.add('scrolled');
+            else nav.classList.remove('scrolled');
+        };
+
+        // --- FAQ ACCORDION ---
+        document.querySelectorAll('.faq-trigger').forEach(trigger => {
+            trigger.onclick = () => {
+                const item = trigger.parentElement;
+                item.classList.toggle('active');
+            };
+        });
+    </script>
+</body>
+  </html> 
