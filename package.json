@@ -11,6 +11,7 @@
     "next": "latest",
     "react": "latest",
     "react-dom": "latest",
+    "stripe": "latest",
     "lucide-react": "latest",
     "clsx": "latest",
     "tailwind-merge": "latest"
