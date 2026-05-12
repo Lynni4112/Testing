@@ -1,0 +1,11 @@
+{
+  "Subscription": {
+    "user_id": "string",
+    "stripe_sub_id": "string",
+    "ptero_server_id": "integer",
+    "plan_name": "string",
+    "allocated_ram": "number",
+    "status": "active | suspended",
+    "next_billing_date": "ISOString"
+  }
+}
